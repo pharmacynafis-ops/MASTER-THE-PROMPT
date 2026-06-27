@@ -86,7 +86,7 @@ E:\CURRENT\MasterThePrompt\
 1. **Clone or download the project**
    ```bash
    # If using git
-   git clone <repository-url>
+   git clone https://github.com/pharmacynafis-ops/MASTER-THE-PROMPT.git
    cd MasterThePrompt
    ```
 
