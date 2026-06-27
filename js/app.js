@@ -1,0 +1,41 @@
+// Main Application Entry Point
+
+const App = {
+    /**
+     * Initialize the application
+     */
+    async init() {
+        try {
+            console.log('Initializing AI Writing Tools...');
+            
+            // Initialize IndexedDB
+            await StorageService.init();
+            console.log('IndexedDB initialized');
+            
+            // Initialize default settings
+            await StorageService.initDefaults();
+            console.log('Default settings loaded');
+            
+            // Initialize all components
+            TabsComponent.init();
+            EditorComponent.init();
+            SettingsComponent.init();
+            
+            console.log('AI Writing Tools initialized successfully');
+            
+        } catch (error) {
+            console.error('Failed to initialize application:', error);
+            alert('Failed to initialize application. Please refresh the page.');
+        }
+    }
+};
+
+// Initialize app when DOM is ready
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => {
+        App.init();
+    });
+} else {
+    // DOM is already loaded
+    App.init();
+}
