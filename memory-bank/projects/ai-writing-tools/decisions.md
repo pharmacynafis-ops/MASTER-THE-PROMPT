@@ -135,12 +135,14 @@
 - Minimal features (just textarea)
 - Rich feature set (many buttons and options)
 - Essential features: word count, copy button
-**Decision**: Word/character count, clear text button, copy to clipboard
+**Decision**: Word/character count, clear text button, copy to clipboard, custom confirmation dialog
 **Rationale**: 
 - User requested "Copy Button" feature
+- User hates browser alert(), wants custom modal instead
 - Keep features simple but useful
 - History feature removed for simplicity
-**Impact**: Each tab will include word count, clear button, and copy button
+**Impact**: Each tab will include word count, clear button, and copy button. All alerts replaced with custom modal dialogs.
+**Status**: ✅ Implemented - Custom modal component created and all browser alerts/confirms replaced
 
 ## 2026-06-27 - IndexedDB Data Storage
 **Context**: Determine what data to store in IndexedDB

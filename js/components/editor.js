@@ -115,15 +115,22 @@ const EditorComponent = {
     /**
      * Setup clear buttons
      */
-    setupClearButtons() {
+    async setupClearButtons() {
         document.querySelectorAll('.clear-btn').forEach(btn => {
-            btn.addEventListener('click', (e) => {
+            btn.addEventListener('click', async (e) => {
                 const editorContainer = e.target.closest('.editor-container');
                 const textarea = editorContainer.querySelector('.editor-input');
                 const outputContent = editorContainer.querySelector('.output-content');
                 
                 if (textarea.value.trim() !== '' || outputContent.textContent.trim() !== '') {
-                    if (confirm('Are you sure you want to clear both input and output?')) {
+                    const confirmed = await CustomModal.confirm(
+                        'Are you sure you want to clear both input and output?',
+                        'Clear Content',
+                        'Clear',
+                        'Cancel'
+                    );
+                    
+                    if (confirmed) {
                         textarea.value = '';
                         outputContent.textContent = '';
                         textarea.dispatchEvent(new Event('input'));
@@ -161,7 +168,7 @@ const EditorComponent = {
         const input = inputElement.value.trim();
         
         if (!input) {
-            alert('Please enter some text first.');
+            await CustomModal.alert('Please enter some text first.', 'warning', 'Input Required');
             return;
         }
         
@@ -170,7 +177,7 @@ const EditorComponent = {
         const model = await StorageService.getModel();
         
         if (!apiKey) {
-            alert('Please configure your OpenRouter API key in settings first.');
+            await CustomModal.alert('Please configure your OpenRouter API key in settings first.', 'warning', 'API Key Required');
             SettingsComponent.open();
             return;
         }
@@ -227,7 +234,7 @@ const EditorComponent = {
                 const text = outputContent.textContent;
                 
                 if (!text) {
-                    alert('No output to copy.');
+                    await CustomModal.alert('No output to copy.', 'info', 'Nothing to Copy');
                     return;
                 }
                 
@@ -248,7 +255,7 @@ const EditorComponent = {
                         btn.classList.remove('copied');
                     }, 2000);
                 } else {
-                    alert('Failed to copy to clipboard.');
+                    await CustomModal.alert('Failed to copy to clipboard.', 'error', 'Copy Failed');
                 }
             });
         });

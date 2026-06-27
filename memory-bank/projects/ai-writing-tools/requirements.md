@@ -45,7 +45,7 @@
 - Large text input area
 - Fullscreen mode for easy editing
 - Word/character count display
-- Clear text button
+- Clear text button with custom confirmation dialog (no browser alert)
 - Clean and intuitive design
 
 ### Output Display

@@ -20,12 +20,13 @@ const App = {
             TabsComponent.init();
             EditorComponent.init();
             SettingsComponent.init();
+            CustomModal.init();
             
             console.log('AI Writing Tools initialized successfully');
             
         } catch (error) {
             console.error('Failed to initialize application:', error);
-            alert('Failed to initialize application. Please refresh the page.');
+            await CustomModal.alert('Failed to initialize application. Please refresh the page.', 'error', 'Initialization Error');
         }
     }
 };
