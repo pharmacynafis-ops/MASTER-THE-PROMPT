@@ -4,9 +4,7 @@
     "ignore": [
       "firebase.json",
       "**/.*",
-      "**/node_modules/**",
-      "**/memory-bank/**",
-      "**/PROJECT-STRUCTURE.md"
+      "**/node_modules/**"
     ],
     "rewrites": [
       {
