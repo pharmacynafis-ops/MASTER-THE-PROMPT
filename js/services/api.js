@@ -43,7 +43,8 @@ const APIService = {
             max_tokens: 2000,
             top_p: 0.9,
             frequency_penalty: 0.3,
-            presence_penalty: 0.3
+            presence_penalty: 0.3,
+            stream: false
         };
         
         try {
@@ -68,6 +69,120 @@ const APIService = {
             
         } catch (error) {
             console.error('API request failed:', error);
+            throw error;
+        }
+    },
+    
+    /**
+     * Send streaming request to OpenRouter API
+     * @param {string} userInput - User's input text
+     * @param {string} systemPrompt - System prompt for the AI
+     * @param {string} apiKey - OpenRouter API key
+     * @param {string} model - Model ID to use
+     * @param {function} onChunk - Callback function called with each chunk of text
+     * @returns {Promise<string>} Complete AI response
+     */
+    async sendStreamingRequest(userInput, systemPrompt, apiKey, model, onChunk) {
+        if (!apiKey) {
+            throw new Error('API key is required. Please configure it in settings.');
+        }
+        
+        if (!userInput || userInput.trim() === '') {
+            throw new Error('Input text is required.');
+        }
+        
+        const url = `${CONFIG.API_BASE_URL}/chat/completions`;
+        
+        const headers = {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${apiKey}`,
+            'HTTP-Referer': window.location.href,
+            'X-Title': 'AI Writing Tools'
+        };
+        
+        const body = {
+            model: model || CONFIG.DEFAULT_MODEL,
+            messages: [
+                {
+                    role: 'system',
+                    content: systemPrompt
+                },
+                {
+                    role: 'user',
+                    content: userInput
+                }
+            ],
+            temperature: 0.7,
+            max_tokens: 2000,
+            top_p: 0.9,
+            frequency_penalty: 0.3,
+            presence_penalty: 0.3,
+            stream: true
+        };
+        
+        try {
+            const response = await fetch(url, {
+                method: 'POST',
+                headers: headers,
+                body: JSON.stringify(body)
+            });
+            
+            if (!response.ok) {
+                const errorText = await response.text();
+                console.error('API Error Response:', errorText);
+                let errorMessage = `HTTP error! status: ${response.status}`;
+                try {
+                    const errorData = JSON.parse(errorText);
+                    errorMessage = errorData.error?.message || errorData.message || errorMessage;
+                } catch (e) {
+                    // Use default error message if parsing fails
+                }
+                throw new Error(errorMessage);
+            }
+            
+            const reader = response.body.getReader();
+            const decoder = new TextDecoder();
+            let fullResponse = '';
+            
+            while (true) {
+                const { done, value } = await reader.read();
+                
+                if (done) {
+                    break;
+                }
+                
+                const chunk = decoder.decode(value);
+                const lines = chunk.split('\n');
+                
+                for (const line of lines) {
+                    if (line.startsWith('data: ')) {
+                        const data = line.slice(6);
+                        
+                        if (data === '[DONE]') {
+                            return fullResponse;
+                        }
+                        
+                        try {
+                            const parsed = JSON.parse(data);
+                            const content = parsed.choices?.[0]?.delta?.content;
+                            
+                            if (content) {
+                                fullResponse += content;
+                                if (onChunk) {
+                                    onChunk(content, fullResponse);
+                                }
+                            }
+                        } catch (e) {
+                            // Skip invalid JSON lines
+                        }
+                    }
+                }
+            }
+            
+            return fullResponse;
+            
+        } catch (error) {
+            console.error('Streaming API request failed:', error);
             throw error;
         }
     },

@@ -3,7 +3,7 @@
 const CONFIG = {
     // OpenRouter API
     API_BASE_URL: 'https://openrouter.ai/api/v1',
-    DEFAULT_MODEL: 'deepseek/deepseek-chat',
+    DEFAULT_MODEL: 'deepseek/deepseek-v3.2',
     
     // IndexedDB
     DB_NAME: 'AIWritingToolsDB',
@@ -87,7 +87,7 @@ const AVAILABLE_MODELS = [
     { id: 'google/gemma-4-26b-a4b-it:free', name: 'Google Gemma 4 26B (Free)', free: true },
     
     // Paid Models
-    { id: 'deepseek/deepseek-chat', name: 'DeepSeek V3.2 Flash', free: false },
+    { id: 'deepseek/deepseek-v3.2', name: 'DeepSeek V3.2 Flash', free: false },
     { id: 'google/gemini-2.5-flash', name: 'Google Gemini 2.5 Flash', free: false },
     { id: 'qwen/qwen3.6-flash', name: 'Qwen3.6 Flash', free: false },
     { id: 'anthropic/claude-sonnet-4.5', name: 'Anthropic Claude Sonnet 4.5', free: false },

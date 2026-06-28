@@ -198,29 +198,39 @@ const EditorComponent = {
                 return;
         }
         
-        // Disable button and show loading
+        // Disable button (no loading overlay for better streaming UX)
         sendButton.disabled = true;
-        sendButton.textContent = 'Processing...';
-        Helpers.setLoading(true);
+        sendButton.textContent = 'Generating...';
         
         try {
-            // Send request to API
-            const response = await APIService.sendRequest(input, systemPrompt, apiKey, model);
+            // Clear output and prepare for streaming
+            outputElement.textContent = '';
             
-            // Display output
-            outputElement.textContent = response;
+            // Send streaming request to API
+            const response = await APIService.sendStreamingRequest(
+                input, 
+                systemPrompt, 
+                apiKey, 
+                model,
+                (chunk, fullText) => {
+                    // Update output in real-time as chunks arrive
+                    outputElement.textContent = fullText;
+                    // Scroll to output to keep up with streaming
+                    DOM.scrollIntoView(outputElement);
+                }
+            );
             
-            // Scroll to output
+            // Final output is already set by streaming callback
+            // Scroll to output one final time
             DOM.scrollIntoView(outputElement);
             
         } catch (error) {
             outputElement.innerHTML = `<span style="color: var(--error);">Error: ${Helpers.escapeHtml(error.message)}</span>`;
             console.error('Processing error:', error);
         } finally {
-            // Re-enable button and hide loading
+            // Re-enable button
             sendButton.disabled = false;
             sendButton.textContent = 'Send';
-            Helpers.setLoading(false);
         }
     },
     
