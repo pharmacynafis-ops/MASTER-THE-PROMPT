@@ -76,7 +76,22 @@ Output format: Provide only the Arabic translation, without explanations unless 
 
 // Available Models
 const AVAILABLE_MODELS = [
-    { id: 'deepseek/deepseek-chat', name: 'DeepSeek V3.2 Flash' }
+    // Free Models
+    { id: 'google/gemma-4-31b-it:free', name: 'Google Gemma 4 31B (Free)', free: true },
+    { id: 'qwen/qwen3-next-80b-a3b-instruct:free', name: 'Qwen3 Next 80B (Free)', free: true },
+    { id: 'nvidia/nemotron-3-ultra-550b-a55b:free', name: 'NVIDIA Nemotron 3 Ultra 550B (Free)', free: true },
+    { id: 'meta-llama/llama-3.3-70b-instruct:free', name: 'Meta Llama 3.3 70B (Free)', free: true },
+    { id: 'qwen/qwen3-coder:free', name: 'Qwen3 Coder 480B (Free)', free: true },
+    { id: 'nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free', name: 'NVIDIA Nemotron 3 Nano Omni (Free)', free: true },
+    { id: 'poolside/laguna-m.1:free', name: 'Poolside Laguna M.1 (Free)', free: true },
+    { id: 'google/gemma-4-26b-a4b-it:free', name: 'Google Gemma 4 26B (Free)', free: true },
+    
+    // Paid Models
+    { id: 'deepseek/deepseek-chat', name: 'DeepSeek V3.2 Flash', free: false },
+    { id: 'google/gemini-2.5-flash', name: 'Google Gemini 2.5 Flash', free: false },
+    { id: 'qwen/qwen3.6-flash', name: 'Qwen3.6 Flash', free: false },
+    { id: 'anthropic/claude-sonnet-4.5', name: 'Anthropic Claude Sonnet 4.5', free: false },
+    { id: 'openai/gpt-4.1-mini', name: 'OpenAI GPT-4.1 Mini', free: false }
 ];
 
 // Export for use in other modules

@@ -8,6 +8,7 @@ const SettingsComponent = {
         this.setupSettingsButton();
         this.setupModalClose();
         this.setupSaveButton();
+        this.populateModelSelect();
         this.loadSavedSettings();
     },
     
@@ -77,6 +78,51 @@ const SettingsComponent = {
         }
     },
     
+    /**
+     * Populate model select dropdown with available models
+     */
+    populateModelSelect() {
+        const modelSelect = DOM.getElement('modelSelect');
+        if (!modelSelect) return;
+
+        // Clear existing options
+        modelSelect.innerHTML = '';
+
+        // Group models by free/paid
+        const freeModels = AVAILABLE_MODELS.filter(m => m.free);
+        const paidModels = AVAILABLE_MODELS.filter(m => !m.free);
+
+        // Add free models group
+        if (freeModels.length > 0) {
+            const freeGroup = document.createElement('optgroup');
+            freeGroup.label = 'Free Models';
+            
+            freeModels.forEach(model => {
+                const option = document.createElement('option');
+                option.value = model.id;
+                option.textContent = model.name;
+                freeGroup.appendChild(option);
+            });
+            
+            modelSelect.appendChild(freeGroup);
+        }
+
+        // Add paid models group
+        if (paidModels.length > 0) {
+            const paidGroup = document.createElement('optgroup');
+            paidGroup.label = 'Premium Models';
+            
+            paidModels.forEach(model => {
+                const option = document.createElement('option');
+                option.value = model.id;
+                option.textContent = model.name;
+                paidGroup.appendChild(option);
+            });
+            
+            modelSelect.appendChild(paidGroup);
+        }
+    },
+
     /**
      * Load saved settings into form
      */
